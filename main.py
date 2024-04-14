@@ -7,6 +7,9 @@ from datetime import datetime, timedelta
 ANNOUNCEMENT_WEEKDAY = 6 # 0:Monday, 6:Sunday
 CHANNEL_ID = 1178200739911307314
 
+# Format and verify global settings
+# [TODO]
+
 def exit_program(message):
     print(f'An error occurred: {message}')
     sys.exit(0)
