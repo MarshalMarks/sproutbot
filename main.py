@@ -3,13 +3,6 @@ from nextcord.ext import commands
 import sys, os, random, asyncio
 from datetime import datetime, timedelta
 
-# Globals/Settings
-ANNOUNCEMENT_WEEKDAY = 6 # 0:Monday, 6:Sunday
-CHANNEL_ID = 1178200739911307314
-
-# Format and verify global settings
-# [TODO]
-
 def exit_program(message):
     print(f'An error occurred: {message}')
     sys.exit(0)
@@ -35,10 +28,15 @@ def update_database():
 # Load bot access token as variable
 if not os.path.isfile('./TOKEN.txt'):
     file = open("TOKEN.txt", "w")
+    file.write("[Replace this line with the bot access token]\n")
+    file.write("[Replace this line with your Sprouts Discord channel ID]\n")
     file.write("[Replace this line with the bot access token]")
     file.close()
     exit_program('a token file was not found! Please open TOKEN.txt and insert the bot access token to continue.')
-token = open('TOKEN.txt').readline().rstrip()
+file = open('TOKEN.txt')
+token = file.readline().rstrip()
+CHANNEL_ID = int(file.readline().rstrip())
+ANNOUNCEMENT_WEEKDAY = int(file.readline().rstrip())
 print('$ Access token successfully loaded as variable')
 
 # Initialize Discord
