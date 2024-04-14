@@ -30,9 +30,9 @@ if not os.path.isfile('./TOKEN.txt'):
     file = open("TOKEN.txt", "w")
     file.write("[Replace this line with the bot access token]\n")
     file.write("[Replace this line with your Sprouts Discord channel ID]\n")
-    file.write("[Replace this line with the bot access token]")
+    file.write("[Replace this line with the day of the week the prompt should be sent, in the form of a number from 0 to 6 (0:Monday, 6:Sunday)]")
     file.close()
-    exit_program('a token file was not found! Please open TOKEN.txt and insert the bot access token to continue.')
+    exit_program('a token file was not found! Please open TOKEN.txt and fill in the blanks to continue.')
 file = open('TOKEN.txt')
 token = file.readline().rstrip()
 CHANNEL_ID = int(file.readline().rstrip())
@@ -111,7 +111,6 @@ async def delete(ctx, index:int):
 async def schedule_weekly_message():
     while True:
         now = datetime.now()
-        print(now)
         then = now.replace(hour=0, minute=0, second=1)
         if then < now:
             then += timedelta(days=1)
@@ -123,8 +122,10 @@ async def schedule_weekly_message():
         weekday = now.strftime('%A')
         if now.weekday() == ANNOUNCEMENT_WEEKDAY and len(prompts) > 0:
             await channel.send(f'The next prompt starts today! It\'ll take place from today until next {weekday}. The prompt for this one is **\"{prompts[0]}\"**!')
+            print(f'$ Announced prompt \"{prompts[0]}\"')
             del prompts[0]
             update_database()
+            print(f'$ Successfully deleted prompt from list')
             await asyncio.sleep(1)
 
 if __name__ == '__main__':
