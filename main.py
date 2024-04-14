@@ -9,15 +9,6 @@ def exit_program(message):
     print(f'An error occurred: {message}')
     sys.exit(0)
 
-# Load bot access token as variable
-if not os.path.isfile('./TOKEN.txt'):
-    file = open("TOKEN.txt", "w")
-    file.write("[Replace this line with the bot access token]")
-    file.close()
-    exit_program('a token file was not found! Please open TOKEN.txt and insert the bot access token to continue.')
-token = open('TOKEN.txt').readline().rstrip()
-print('$ Access token successfully loaded as variable')
-
 # Load local prompt list as array
 if not os.path.isfile('./prompts.txt'):
     print('$ prompt.txt not found')
@@ -29,6 +20,15 @@ else:
 prompts = [line.rstrip() for line in open('./prompts.txt')]
 print('$ List of prompts loaded into memory:')
 print(f'$ {prompts}')
+
+# Load bot access token as variable
+if not os.path.isfile('./TOKEN.txt'):
+    file = open("TOKEN.txt", "w")
+    file.write("[Replace this line with the bot access token]")
+    file.close()
+    exit_program('a token file was not found! Please open TOKEN.txt and insert the bot access token to continue.')
+token = open('TOKEN.txt').readline().rstrip()
+print('$ Access token successfully loaded as variable')
 
 # Initialize Discord
 intents = nextcord.Intents.all()
