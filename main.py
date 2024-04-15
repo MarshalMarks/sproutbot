@@ -78,10 +78,14 @@ async def commands(ctx):
 
 @client.command()
 async def add(ctx, *, arg):
-    prompts.append(arg)
-    update_database()
-    print(f'$ \"{arg}\" successfully added to the prompt list')
-    await ctx.send(f'Added {arg} to the prompt list! :D')
+    prompt = arg.lower().rstrip()
+    if prompt in prompts:
+        await ctx.send(f'Whoops, it looks like {prompt} is already on the list!')
+    else:
+        prompts.append(prompt)
+        update_database()
+        print(f'$ \"{prompt}\" successfully added to the prompt list')
+        await ctx.send(f'Added {prompt} to the prompt list! :D')
 
 @client.command()
 async def list(ctx):
@@ -92,7 +96,7 @@ async def list(ctx):
     output = ''
     for i, prompt in enumerate(prompts):
         output += f'{i+1}) {prompt}\n'
-    embed.add_field(name='Prompts', value=output, inline=True)
+    embed.add_field(name='Upcoming Prompts', value=output, inline=True)
     await ctx.send(content=None, embed=embed)
 
 @client.command()
