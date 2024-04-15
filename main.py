@@ -80,7 +80,7 @@ async def commands(ctx):
 async def add(ctx, *, arg):
     prompt = arg.lower().rstrip()
     if prompt in prompts:
-        await ctx.send(f'Whoops, it looks like {prompt} is already on the list!')
+        await ctx.send(f'Whoops, it looks like \"{prompt}\" is already on the list!')
     else:
         prompts.append(prompt)
         update_database()
