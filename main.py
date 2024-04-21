@@ -25,6 +25,14 @@ def update_database():
         file.write(f'{prompt}\n')
     file.close()
 
+def format_weekday_array(array):
+    output = []
+    for number in array:
+        if number >= 0 and number <= 6 and number not in output:
+            output.append(number)
+    output.sort()
+    return output
+
 # Load bot access token as variable
 if not os.path.isfile('./TOKEN.txt'):
     file = open("TOKEN.txt", "w")
@@ -37,7 +45,8 @@ file = open('TOKEN.txt')
 token = file.readline().rstrip()
 CHANNEL_ID = int(file.readline().rstrip())
 weekday_array = [int(number) for number in file.readline().rstrip().split(' ')]
-ANNOUNCEMENT_WEEKDAY = weekday_array[1]
+weekday_array = format_weekday_array(weekday_array)
+ANNOUNCEMENT_WEEKDAY = weekday_array[0]
 print('$ Access token successfully loaded as variable')
 
 # Initialize Discord
