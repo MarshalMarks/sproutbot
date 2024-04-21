@@ -3,9 +3,26 @@ from nextcord.ext import commands
 import sys, os, random, asyncio
 from datetime import datetime, timedelta
 
+WEEKDAY_NAME = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
 def exit_program(message):
     print(f'An error occurred: {message}')
     sys.exit(0)
+
+def format_weekday_array(array):
+    output = []
+    for number in array:
+        if number >= 0 and number <= 6 and number not in output:
+            output.append(number)
+    output.sort()
+    output.append(output[0])
+    return output
+
+def search(array, item):
+    try:
+        return array.index(item)
+    except ValueError:
+        return -1
 
 # Load local prompt list as array
 if not os.path.isfile('./prompts.txt'):
@@ -25,14 +42,6 @@ def update_database():
         file.write(f'{prompt}\n')
     file.close()
 
-def format_weekday_array(array):
-    output = []
-    for number in array:
-        if number >= 0 and number <= 6 and number not in output:
-            output.append(number)
-    output.sort()
-    return output
-
 # Load bot access token as variable
 if not os.path.isfile('./TOKEN.txt'):
     file = open("TOKEN.txt", "w")
@@ -46,6 +55,7 @@ token = file.readline().rstrip()
 CHANNEL_ID = int(file.readline().rstrip())
 weekday_array = [int(number) for number in file.readline().rstrip().split(' ')]
 weekday_array = format_weekday_array(weekday_array)
+print('$ Formatted weekday array loaded as ' + str(weekday_array))
 ANNOUNCEMENT_WEEKDAY = weekday_array[0]
 print('$ Access token successfully loaded as variable')
 
@@ -133,14 +143,17 @@ async def schedule_weekly_message():
 
         channel = client.get_channel(CHANNEL_ID)
 
-        weekday = now.strftime('%A')
-        if now.weekday() == ANNOUNCEMENT_WEEKDAY and len(prompts) > 0:
-            await channel.send(f'The next prompt starts today! It\'ll take place from today until next {weekday}. The prompt for this one is **\"{prompts[0]}\"**!')
-            print(f'$ Announced prompt \"{prompts[0]}\"')
-            del prompts[0]
-            update_database()
-            print(f'$ Successfully deleted prompt from list')
-            await asyncio.sleep(1)
+        next_weekday_index = search(weekday_array, now.weekday())
+        if next_weekday_index != -1:
+            next_weekday = weekday_array[next_weekday_index + 1]
+            print(weekday_array[next_weekday_index + 1])
+            if len(prompts) > 0:
+                await channel.send(f'The next prompt starts today! It\'ll take place from today until next {WEEKDAY_NAME[next_weekday]}. The prompt for this one is **\"{prompts[0]}\"**!')
+                print(f'$ Announced prompt \"{prompts[0]}\"')
+                del prompts[0]
+                update_database()
+                print(f'$ Successfully deleted prompt from list')
+                await asyncio.sleep(1)
 
 if __name__ == '__main__':
     client.run(token)
