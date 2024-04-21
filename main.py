@@ -36,7 +36,8 @@ if not os.path.isfile('./TOKEN.txt'):
 file = open('TOKEN.txt')
 token = file.readline().rstrip()
 CHANNEL_ID = int(file.readline().rstrip())
-ANNOUNCEMENT_WEEKDAY = int(file.readline().rstrip())
+weekday_array = [int(number) for number in file.readline().rstrip().split(' ')]
+ANNOUNCEMENT_WEEKDAY = weekday_array[1]
 print('$ Access token successfully loaded as variable')
 
 # Initialize Discord
