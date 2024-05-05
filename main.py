@@ -135,7 +135,7 @@ async def delete(ctx, index:int):
 async def schedule_weekly_message():
     while True:
         now = datetime.now()
-        then = now.replace(hour=0, minute=0, second=1)
+        then = now.replace(hour=1, minute=13, second=30)
         if then < now:
             then += timedelta(days=1)
         wait_time = (then-now).total_seconds()
@@ -148,7 +148,7 @@ async def schedule_weekly_message():
             next_weekday = weekday_array[next_weekday_index + 1]
             print(weekday_array[next_weekday_index + 1])
             if len(prompts) > 0:
-                await channel.send(f'The next prompt starts today! It\'ll take place from today until next {WEEKDAY_NAME[next_weekday]}. The prompt for this one is **\"{prompts[0]}\"**!')
+                await channel.send(f'The next prompt starts today! It\'ll take place from today until {WEEKDAY_NAME[next_weekday]}. The prompt for this one is **\"{prompts[0]}\"**!')
                 print(f'$ Announced prompt \"{prompts[0]}\"')
                 del prompts[0]
                 update_database()
