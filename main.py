@@ -135,7 +135,7 @@ async def delete(ctx, index:int):
 async def schedule_weekly_message():
     while True:
         now = datetime.now()
-        then = now.replace(hour=1, minute=13, second=30)
+        then = now.replace(hour=0, minute=0, second=0)
         if then < now:
             then += timedelta(days=1)
         wait_time = (then-now).total_seconds()
